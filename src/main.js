@@ -9,6 +9,7 @@ import {processFormData} from "./lib/utils.js";
 import {initTable} from "./components/table.js";
 // @todo: подключение
 import {initPagination} from "./components/pagination.js";
+import {initSearching} from "./components/searching.js";
 import {initFiltering} from "./components/filtering.js";
 import {initSorting} from "./components/sorting.js";
 
@@ -39,6 +40,7 @@ function render(action) {
     let result = [...data]; // копируем для последующего изменения
     // @todo: использование
     result = applyPagination(result, state, action);
+    result = applySearching(result, state, action);
     result = applyFiltering(result, state, action);
     result = applySorting(result, state, action);
     sampleTable.render(result)
@@ -47,7 +49,7 @@ function render(action) {
 const sampleTable = initTable({
     tableTemplate: 'table',
     rowTemplate: 'row',
-    before: ['header', 'filter'],
+    before: ['search', 'header', 'filter'],
     after: ['pagination']
 }, render);
 
@@ -63,6 +65,7 @@ const applyPagination = initPagination(
         return el;
     }
 );
+const applySearching = initSearching(sampleTable.search.elements);
 const applyFiltering = initFiltering(sampleTable.filter.elements, {    // передаём элементы фильтра
     searchBySeller: indexes.sellers                                    // для элемента с именем searchBySeller устанавливаем массив продавцов
 });
